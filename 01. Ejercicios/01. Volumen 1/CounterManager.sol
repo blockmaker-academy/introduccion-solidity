@@ -6,10 +6,6 @@ import "./Counter.sol";
 contract CounterManager {
     Counter public counterContract;
 
-    constructor(address _counterAddress) {
-        counterContract = Counter(_counterAddress);
-    }
-
     function incrementCounter() public {
         counterContract.increment();
     }
