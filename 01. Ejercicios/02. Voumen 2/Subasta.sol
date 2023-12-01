@@ -36,6 +36,7 @@ contract Subasta {
         finSubasta = block.timestamp + tiempoOferta;
     }
 
+    // Sin require
     function ofertar() public payable {
 
         if(block.timestamp > finSubasta) {
@@ -52,6 +53,59 @@ contract Subasta {
 
         mejorPostor = msg.sender;
         mejorOferta = msg.value;
+
         emit OfertaMasAltaIncrementada(mejorPostor, mejorOferta);
     }
+
+    // Con require
+    function ofertar2() public payable {
+
+    }
+
+    // Sin require
+    function retirar() public returns(bool) {
+        uint256 cantidad = devolucionesPendientes[msg.sender]; // valor que le debemos al emisor
+        // te debo pasta
+        if (cantidad > 0) {
+
+            // no consigo realizar el envío de fondos
+            if(!payable(msg.sender).send(cantidad)) { // !false => true
+                return false;
+            }
+
+            // envío de fondos realizado
+            devolucionesPendientes[msg.sender] = 0;
+            return true;
+        }
+        return false;
+    }
+
+    // Con require
+    function retirar2() public {
+        require(devolucionesPendientes[msg.sender] > 0, "No hay deudas pendientes para ti");
+        require(!payable(msg.sender).send(devolucionesPendientes[msg.sender]), "No se han conseguido enviar los fondos");
+        devolucionesPendientes[msg.sender] = 0;
+    }
+
+    // Sin require
+    function finalizarSubasta() public soloPropietario {
+        if (finSubasta > block.timestamp) {
+            revert SubastaNoFinalizadaTodavia();    
+        }
+        
+        if(finalizada) {
+            revert FinSubastaYaLlamado();
+        }
+
+        finalizada = true;
+        beneficiario.transfer(mejorOferta);
+
+        emit SubastaFinalizada(mejorPostor, mejorOferta);
+    }
+
+    // Con require
+    function finalizarSubasta2() public soloPropietario {
+
+    }
+
 }
