@@ -13,9 +13,6 @@ const contract = new web3.eth.Contract(contractABI, contractAddress);
 // Subscribe to the event
 const event = contract.events.ProductoComprado({ fromBlock: 0, toBlock: 'latest' });
 
-// contract = Mercado
-// events = ProductoAgregado ProductoComprado
-
 // Listen for events
 event.on('data', (event) => {
   console.log('Event data:', event.returnValues);
