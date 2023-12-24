@@ -1,19 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./Counter.sol";
+import { Counter } from "./Counter.sol";
 
-contract CounterManager {
-    Counter public counterContract;
+contract CounterManager is Counter {
+
+    constructor() Counter() {
+        // no introducimos nada en este constructor ya que sólo queremos
+        // inicializar el contrato Counter
+    }
 
     function incrementCounter() public {
-        counterContract.increment();
+        Counter.increment();
     }
 
     function getCounterValue() public view returns (uint) {
-        return counterContract.getCount();
+        return Counter.getCount();
     }
 }
-
-
 
