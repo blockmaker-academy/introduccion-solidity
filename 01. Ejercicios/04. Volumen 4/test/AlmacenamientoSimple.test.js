@@ -1,4 +1,5 @@
 // SimpleStorageTest.js
+import fetch from "node-fetch";
 const AlmacenamientoSimple = artifacts.require('AlmacenamientoSimple');
 const { expect } = require('chai');
 
